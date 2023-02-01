@@ -1,6 +1,11 @@
 import {Route, Switch} from 'react-router-dom'
+
+// Layouts
 import AuthLayout from './components/layouts/AuthLayout'
 import FrontLayout from './components/layouts/FrontLayout'
+import AdminLayout from './components/layouts/AdminLayout'
+
+// Frontend Pages
 import About from './pages/frontend/about/About'
 import Forgotpassword from './pages/frontend/forgotpassword/Forgotpassword'
 import Home from './pages/frontend/home/Home'
@@ -9,6 +14,11 @@ import PageNotFound from './pages/frontend/pagenotfound/PageNotFound'
 import Project from './pages/frontend/project/Project'
 import Register from './pages/frontend/register/Register'
 import Team from './pages/frontend/team/Team'
+
+// Backend Pages
+import Dashboard from './pages/backend/dashboard/Dashboard'
+import Reststrapi from './pages/backend/reststrapi/Reststrapi'
+
 
 const AppRoute = ({component: Component, layout: Layout, ...rest}) => (
    <Route {...rest} render={ props => (
@@ -32,6 +42,8 @@ const Routes = () => {
             <AppRoute path="/forgotpassword" layout={AuthLayout} component={Forgotpassword} />
 
             {/* Backend */}
+            <AppRoute path="/dashboard" layout={AdminLayout} component={Dashboard} />
+            <AppRoute path="/reststrapi" layout={AdminLayout} component={Reststrapi} />
     
              {/* Pagenotfound */}
             <Route component={PageNotFound} />
