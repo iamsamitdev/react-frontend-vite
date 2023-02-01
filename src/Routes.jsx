@@ -18,6 +18,7 @@ import Team from './pages/frontend/team/Team'
 // Backend Pages
 import Dashboard from './pages/backend/dashboard/Dashboard'
 import Reststrapi from './pages/backend/reststrapi/Reststrapi'
+import AddProduct from './pages/backend/reststrapi/AddProduct'
 
 
 const AppRoute = ({component: Component, layout: Layout, ...rest}) => (
@@ -44,6 +45,7 @@ const Routes = () => {
             {/* Backend */}
             <AppRoute path="/dashboard" layout={AdminLayout} component={Dashboard} />
             <AppRoute path="/reststrapi" layout={AdminLayout} component={Reststrapi} />
+            <AppRoute path="/addproduct" layout={AdminLayout} component={AddProduct} />
     
              {/* Pagenotfound */}
             <Route component={PageNotFound} />

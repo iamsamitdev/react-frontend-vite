@@ -1,175 +1,152 @@
-/* eslint-disable jsx-a11y/alt-text */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTable } from "@fortawesome/free-solid-svg-icons"
+import React, { useState, useEffect } from "react"
+import { NavLink } from "react-router-dom"
+import api from '../../../services/productAPI'
+import { NumericFormat } from 'react-number-format'
+
+// DayJS
+import dayjs from "dayjs"
+import thai from "dayjs/locale/th"
+import relativeTime from "dayjs/plugin/relativeTime"
+import buddhistEra from "dayjs/plugin/buddhistEra"
+
+dayjs.locale(thai)
+dayjs.extend(relativeTime)
+dayjs.extend(buddhistEra)
+
 const Reststrapi = () => {
   document.title = "Rest API with Strapi"
+
+  // State for products data
+  const [products, setProducts] = useState([]);
+
+  // read all products
+  const readAllProducts = () => {
+    api.getAllProduct().then((response) => {
+      setProducts(response.data)
+    })
+  }
+
+  // initial load
+  useEffect(() => {
+    readAllProducts()
+  }, [])
+
+  // console.log(products)
+
   return (
     <>
-      <h1 className="text-3xl text-black pb-6">Rest API (Strapi)</h1>
+      <div className="flex my-6">
+          <h1 className="text-2xl text-black pb-6">Product ({products.length})</h1>
+          <p className="flex-1 text-right">
+            <NavLink to="/addproduct" className="border-green-500 border-2 rounded-sm px-2 py-1 mb-2 hover:text-white hover:bg-green-500 text-xl">+ เพิ่มรายการ</NavLink>
+          </p>
+      </div>
 
-      <div className="w-full mt-12">
-        <p className="text-xl pb-3 flex items-center">
-            <FontAwesomeIcon icon={faTable} />&nbsp; Product List
-        </p>
+      <div className="w-full">
         <div className="bg-white overflow-auto">
-          <table className="min-w-full leading-normal">
-            <thead>
+          <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50 text-gray-500 uppercase font-medium text-xs text-left tracking-wider">
               <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  User
+                <th scope="col" className="px-6 py-3">
+                  Name
                 </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Rol
+                <th scope="col" className="px-6 py-3">
+                  Price
                 </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Created at
+                <th className="px-5 py-3">
+                  Qty
                 </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Status
+                <th className="px-5 py-3">
+                  Category
+                </th>
+                <th className="px-5 py-3">
+                  Created
+                </th>
+                <th className="px-5 py-3">
+                  Updated
+                </th>
+                <th className="px-5 py-3 text-right">
+                  Manage
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              { 
+              products.map((product, index) => (
+              
+              <tr key={index}>
+
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 w-10 h-10">
-                      <img
-                        className="w-full h-full rounded-full"
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                        alt=""
-                      />
+                      {
+                        product.image ?
+                        <img
+                          className="w-full h-full rounded-full"
+                          src={import.meta.env.VITE_BASE_URL_API+product.image[0].url}
+                        />
+                        :
+                        <img className="h-10 w-10 rounded-full" src="/assets/images/noimg.jpg" />
+                      }
                     </div>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        Vera Carpenter
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">Admin</p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">
-                    Jan 21, 2020
-                  </p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                    />
-                    <span className="relative">Activo</span>
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 w-10 h-10">
-                      <img
-                        className="w-full h-full rounded-full"
-                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        Blake Bowman
-                      </p>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">
+                        {product.title && product.title.substring(0, 24)} ..
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {product.description && product.description.substring(0, 24)} ..
+                      </div>
                     </div>
                   </div>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">Editor</p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+
+                <td className="px-5 py-5 border-b">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    Jan 01, 2020
+                    <NumericFormat 
+                    value={product.price} 
+                    fixedDecimalScale={true}
+                    decimalScale={2}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    /> บาท
                   </p>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                    />
-                    <span className="relative">Activo</span>
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 w-10 h-10">
-                      <img
-                        className="w-full h-full rounded-full"
-                        src="https://images.unsplash.com/photo-1540845511934-7721dd7adec3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        Dana Moore
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">Editor</p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+
+                <td className="px-5 py-5 border-b">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    Jan 10, 2020
+                  {product.qty}
                   </p>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <span className="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 bg-orange-200 opacity-50 rounded-full"
-                    />
-                    <span className="relative">Suspended</span>
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-5 py-5 bg-white text-sm">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 w-10 h-10">
-                      <img
-                        className="w-full h-full rounded-full"
-                        src="https://images.unsplash.com/photo-1522609925277-66fea332c575?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&h=160&w=160&q=80"
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        Alonzo Cox
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-5 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">Admin</p>
-                </td>
-                <td className="px-5 py-5 bg-white text-sm">
+
+                <td className="px-5 py-5 border-b ">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    Jan 18, 2020
+                    {product.category.title}
                   </p>
                 </td>
-                <td className="px-5 py-5 bg-white text-sm">
-                  <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
-                    />
-                    <span className="relative">Inactive</span>
-                  </span>
+
+                <td className="px-5 py-5 border-b text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                    {dayjs(product.created_at).format("D MMMM BBBB H:m:s")}
+                  </p>
                 </td>
+
+                <td className="px-5 py-5 border-b text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                    {dayjs(product.updated_at).fromNow()}
+                  </p>
+                </td>
+
+                <td className="px-5 py-5 border-b text-sm text-right">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                    <a href="#edit" className="border-yellow-500 border-2 rounded-sm px-3 py-1 hover:text-white hover:bg-yellow-500">แก้ไข</a> &nbsp;
+                    <a href="#delete" className="border-red-500 border-2 rounded-sm px-3 py-1 hover:text-white hover:bg-red-500">ลบออก</a>
+                  </p>
+                </td>
+
               </tr>
+
+              ))
+              }
             </tbody>
           </table>
         </div>
